@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
 
-db = app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
