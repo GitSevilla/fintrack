@@ -1,15 +1,19 @@
 from flask import Flask
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from extensions import db, migrate
+from routes.main_routes import main
 
+def create_app():
 
-app = Flask(__name__)
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    db.init_app(app)
+    app.register_blueprint(main)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+    from models.income_model import Income
+    migrate.init_app(app, db)
 
+    
+    
+    return app
 
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
+app = create_app()
