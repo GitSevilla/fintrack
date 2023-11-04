@@ -2,6 +2,7 @@ from flask import Flask
 from extensions import db, migrate
 from routes.main_routes import main
 from routes.income_routes import income_bp
+from routes.expense_routes import expense_bp
 
 def create_app():
 
@@ -10,8 +11,8 @@ def create_app():
     db.init_app(app)
     app.register_blueprint(main)
     app.register_blueprint(income_bp)
+    app.register_blueprint(expense_bp)
 
-    from models.income_model import Income
     migrate.init_app(app, db)
 
     
