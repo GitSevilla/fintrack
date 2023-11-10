@@ -5,6 +5,7 @@ from routes.main_routes import main
 from routes.income_routes import income_bp
 from routes.expense_routes import expense_bp
 from routes.auth_routes import auth_bp
+from models import *
 
 def create_app():
 
@@ -22,6 +23,7 @@ def create_app():
     app.register_blueprint(income_bp)
     app.register_blueprint(expense_bp)
     migrate.init_app(app, db)
+
 
     #OAuth config
     oauth.init_app(app)

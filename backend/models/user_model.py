@@ -7,8 +7,8 @@ class User(db.Model):
     oauth_id = db.Column(db.String(200), unique=True, index=True)
     email = db.Column(db.String(120), unique=True, index=True)
     name = db.Column(db.String(120))
-    created_at = db.Column(db.Datetime, default=datetime.utcnow)
-    updated_at = db.Column(db.Datetime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def lower_case(email):
         return email.lower() if email else None
