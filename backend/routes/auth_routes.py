@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, url_for, session, jsonify
 from flask import current_app as app
 from extensions import oauth
+import services.user_service as a_s
 import secrets
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -21,16 +22,32 @@ def callback():
     nonce = session.get('nonce')
 
     user_info = oauth.auth0.parse_id_token(token, nonce=nonce)
+    
+    
     if user_info.get('nonce') != session.pop('nonce', None):
         return 'Nonce mismatched', 401
     
+    #Checks to see if user is in database
+    verified_user = a_s.verify_user_by_id(user_info['sub'])
+    if verified_user is None:
+        a_s.create_user(user_info['sub'], user_info['email'], user_info['name'])
+
     # Store the user information in, for example, the session
     session['user'] = user_info
-    return redirect('/')
+    if a_s.verify_user_by_id(user_info['sub']) is None:
+        return redirect('/')
+    
+    return redirect('/user')
 
 @auth_bp.route('/logout')
 def logout():
     # Clear the user information from the session
+    user_info = session['user']
+    print(user_info)
+    if user_info:
+        sub = user_info['sub']
+        a_s.delete_user(sub)
+        print("Deleted User")
     session.pop('user', None)
     
     # Redirect to the logout URL provided by the OAuth provider

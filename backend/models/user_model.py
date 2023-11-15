@@ -3,10 +3,9 @@ from datetime import datetime
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    oauth_provider = db.Column(db.String(120))
-    oauth_id = db.Column(db.String(200), unique=True, index=True)
-    email = db.Column(db.String(120), unique=True, index=True)
-    name = db.Column(db.String(120))
+    oauth_id = db.Column(db.String(200), unique=True, index=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, index=True, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
